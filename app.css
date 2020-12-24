@@ -1,4 +1,8 @@
 /* General Styles */
+*, *:before, *:after {
+    box-sizing: border-box;
+}
+
 body {
     background: rgb(111, 208, 224);
     background: linear-gradient(0deg,rgb(111, 208, 224) 0%, rgb(171, 228, 167) 100%);
@@ -89,7 +93,7 @@ p {
 
 @media (min-width: 550px) {
     #grid div {
-        width: calc(100% / 3);
+        /* width: calc(100% / 3); */
     }
 }
 
@@ -172,3 +176,4 @@ select {
     display: block;
     font-size: 0.7em;
 }
+
