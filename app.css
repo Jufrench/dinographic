@@ -39,6 +39,10 @@ p {
     font-weight: 100;
 }
 
+.hidden {
+    visibility: hidden;
+}
+
 /* Grid Styles */
 #grid {
     background: #fff url(images/tracks.png) no-repeat;
@@ -51,51 +55,75 @@ p {
 
 .grid-item {
     position: relative;
-    box-sizing: border-box;
     width: 100%;
+    padding: 10px;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+}
+
+.grid-item:before {
+    content: '';
+    display: block;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.6);
+    position: absolute;
+    /* z-index: -1; */
+    top: 0;
+    left: 0;
+}
+
+#grid .grid-item:after {
+    content: '';
+    padding-bottom: 50%;
+    display: block;
 }
 
 .grid-item:nth-child(1){
-    background: #009687f5;
-    border: 2px solid #009687f5;
+    background-color: #009687f5;
 }
 
 .grid-item:nth-child(2){
-    background: #dc7657f5;
+    background-color: #dc7657f5;
 }
 
 .grid-item:nth-child(3){
-    background: #4bb3c1fa;
+    background-color: #4bb3c1fa;
 }
 
 .grid-item:nth-child(4){
-    background: #fac069f9;
+    background-color: #fac069f9;
 }
 
 .grid-item:nth-child(5){
-    background: #67a866f9;
+    background-color: #67a866f9;
 }
 
 .grid-item:nth-child(6){
-    background: #b94169fa;
+    background-color: #b94169fa;
 }
 
 .grid-item:nth-child(7){
-    background: #7f62b3fa;
+    background-color: #7f62b3fa;
 }
 
 .grid-item:nth-child(8){
-    background: #9fc376f9;
+    background-color: #9fc376f9;
 }
 
 .grid-item:nth-child(9){
-    background: #677bcbfa;
+    background-color: #677bcbfa;
 }
 
 @media (min-width: 550px) {
-    #grid div {
+    #grid > div {
         width: calc(100% / 3);
     }
+}
+
+.grid-item-inner {
+    position: relative;
 }
 
 .grid-item h3 {
@@ -108,7 +136,27 @@ p {
     padding-bottom: 1em;
 }
 
-.grid-item p {
+.grid-item .grid-item-inner p {
+    color: #fff;
+    font-size: 1.2em;
+}
+
+/* HUMAN */
+.info {
+    text-align: left;
+    list-style: none;
+}
+
+.info li {
+    font-size: 1.2em;
+    color: #fff;
+}
+
+.info li span + span {
+    margin-left: 4px;
+}
+
+/* .grid-item p {
     background: rgba(000,000,000, .3);
     position: absolute;
     bottom: 0;
@@ -119,7 +167,7 @@ p {
     font-size: 1.2em;
     font-weight: 600;
     color: #fff;
-}
+} */
 
 /* Form Styles */
 .form-container {

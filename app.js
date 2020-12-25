@@ -49,13 +49,14 @@ getDinoData().then(data => {
 // Create Dino Compare Method 1
 // NOTE: Weight in JSON file is in lbs, height in inches. 
 DinoConstructor.prototype.compareHeight = function(_param) {
+    console.log(_param);
     const humanHeight = (_param.feet * 12) + _param.inches;
     let fact;
 
     if (this.height < humanHeight) {
-        fact = `The ${this.species} is ${(humanHeight / this.height).toFixed(2)} times smaller than ${_param.name}`;
+        fact = `The ${this.species} is ${(humanHeight / this.height).toFixed(2)} times smaller than ${_param.name}.`;
     } else {
-        fact = `The ${this.species} is ${(this.height / humanHeight).toFixed(2)} times larger than ${_param.name}`;
+        fact = `The ${this.species} is ${(this.height / humanHeight).toFixed(2)} times larger than ${_param.name}.`;
     }
 
     this.facts.push(fact);
@@ -66,9 +67,9 @@ DinoConstructor.prototype.compareWeight = function(_param) {
     let fact;
 
     if (this.weight < _param.weight) {
-        fact = `The ${this.species} is ${(_param.weight / this.weight).toFixed(2)} times lighter than ${_param.name}`;
+        fact = `The ${this.species} is ${(_param.weight / this.weight).toFixed(2)} times lighter than ${_param.name}.`;
     } else {
-        fact = `The ${this.species} is ${(this.weight / _param.weight).toFixed(2)} times heavier than ${_param.name}`;
+        fact = `The ${this.species} is ${(this.weight / _param.weight).toFixed(2)} times heavier than ${_param.name}.`;
     }
 
     this.facts.push(fact);
@@ -78,7 +79,7 @@ DinoConstructor.prototype.compareWeight = function(_param) {
 DinoConstructor.prototype.compareDiet = function(_param) {
     const dinoArticle = this.diet === 'carnivore' ? 'a' : 'an';
     const humanArticle = _param.diet === 'carnivore' ? 'a' : 'an';
-    const fact = `The ${this.species} is ${dinoArticle} ${this.diet}, while ${_param.name} is ${humanArticle} ${_param.diet}`;
+    const fact = `The ${this.species} is ${dinoArticle} ${this.diet}, while ${_param.name} is ${humanArticle} ${_param.diet}.`;
 
     this.facts.push(fact);
 }
@@ -94,18 +95,24 @@ DinoConstructor.prototype.addFacts = function() {
 
 DinoConstructor.prototype.createContent = function() {
     const el = document.createElement('DIV');
-    let content = `<h3>${this.species}</h3>`;
+    let name = this.species.split(' ').join('_');
+    let factToShow = this.species === 'Pigeon' ? 0 : Math.floor(Math.random() * (this.facts.length - 1));
+    let content = `<div class="grid-item-inner">
+                                <h3>${this.species}</h3>
+                                <p class="fact">${this.facts[factToShow]}</p>
+                            </div>`;
+    // let content = `<h3>${this.species}</h3>
+    //                 <p class="fact">${this.facts[factToShow]}</p>`;
 
     el.classList.add('grid-item');
-    content += `<img src="images/${this.species}.png" />`;
+    el.setAttribute('style', `background-image: url(images/${name}.png)`);
+
     el.innerHTML = content;
 
     return el;
 }
 
 const createDinoHTML = (_array) => {
-    // console.log(_array);
-    
     const htmlElArray = _array.map(dino => {
         return dino.createContent();
     });
@@ -114,10 +121,15 @@ const createDinoHTML = (_array) => {
 };
 
 function updateDinos(_array, _human) {
+    const humanCopy = {};
+
+    Object.assign(humanCopy, _human);
+    delete humanCopy.element;
+
     _array.forEach(dino => {
-        dino.compareHeight(_human);
-        dino.compareWeight(_human);
-        dino.compareDiet(_human);
+        dino.compareHeight(humanCopy);
+        dino.compareWeight(humanCopy);
+        dino.compareDiet(humanCopy);
         dino.addFacts();
     });
 
@@ -126,14 +138,10 @@ function updateDinos(_array, _human) {
 
 // Generate Tiles for each Dino in Array
 const makeTiles = _array => {
-    // console.log(_array);
     // const elementsArr = _array.map(item => {
     //     return Helper.createDomEl({ type: 'DIV', classes: ['grid-item'] });
     //     // return item.createContent();
     // });
-
-
-    // console.log(elementsArr);
 
     // return elementsArr;
 };
@@ -143,8 +151,6 @@ const addTilesToDOM = _array => {
     const domGrid = document.getElementById('grid');
 
     document.getElementById('dino-compare').style.display = 'none';
-
-    console.log(_array);
 
     _array.forEach(arrItem => {
         domGrid.insertAdjacentElement('afterbegin', arrItem);
@@ -184,34 +190,40 @@ function init() {
         diet = document.getElementById('diet').value;
 
         let el = document.createElement('DIV');
-        let content = `<h3>${name}</h3>`;
+        let content = `<div class="grid-item-inner">
+                        <h3>${name}</h3>
+                        <ul class="info">
+                            <li>Height: <span>${feet}</span><span>feet</span><span>${inches}</span><span>inches</span></li>
+                            <li>Weight: <span>${weight}</span><span>lbs</span></li>
+                            <li>Diet: <span>${diet}</span></li>
+                        </ul>
+                    </div>`;
 
         el.classList.add('grid-item');
         el.innerHTML = content;
         
-        return el;
+        // return el;
 
-        // return {
-        //     name,
-        //     feet,
-        //     inches,
-        //     weight,
-        //     diet
-        // }
+        return {
+            name,
+            feet,
+            inches,
+            weight,
+            diet,
+            element: el,
+        }
     })();
-
+    console.log(human);
     const dinosArrayUpdated = updateDinos(dinosArray, human);
-    // console.log(dinosArrayUpdated);
-
     const dinosHtmlArray = createDinoHTML(dinosArrayUpdated);
-    // console.log(dinosHtmlArray);
-
-    const dinosArrayWithHuman = addHumanToTilesArray(dinosHtmlArray, human);
-    // console.log(dinosArrayWithHuman);
+    const dinosArrayWithHuman = addHumanToTilesArray(dinosHtmlArray, human.element);
 
     addTilesToDOM(dinosArrayWithHuman);
 }
 
 // On button click, prepare and display infographic
-document.getElementById('btn').addEventListener('click', init);
+document.getElementById('btn').addEventListener('click', e => {
+    e.preventDefault();
+    init();
+});
 
