@@ -3,9 +3,6 @@ import * as Helper from './helper.js';
 // Start http-server w/ "npx http-server"
 // See link for http-server documentation: https://github.com/http-party/http-server
 
-// TODO:
-
-
 const getDinoData = async () => {
     const fetchedData = await fetch('http://127.0.0.1:8080/dino.json');
     const data = await fetchedData.json();
@@ -95,28 +92,68 @@ DinoConstructor.prototype.addFacts = function() {
     this.facts.push(fact2);
 }
 
-// Generate Tiles for each Dino in Array
-const makeTiles = _array => {
-    console.log('%cMaking tiles...', 'color: #fc3d39');
-    console.log(_array);
-    const elementsArr = _array.map(item => {
-        return Helper.createDomEl('DIV');
+DinoConstructor.prototype.createContent = function() {
+    const el = document.createElement('DIV');
+    let content = `<h3>${this.species}</h3>`;
+
+    el.classList.add('grid-item');
+    content += `<img src="images/${this.species}.png" />`;
+    el.innerHTML = content;
+
+    return el;
+}
+
+const createDinoHTML = (_array) => {
+    // console.log(_array);
+    
+    const htmlElArray = _array.map(dino => {
+        return dino.createContent();
     });
 
-    console.log(elementsArr);
+    return htmlElArray;
+};
 
-    return elementsArr;
+function updateDinos(_array, _human) {
+    _array.forEach(dino => {
+        dino.compareHeight(_human);
+        dino.compareWeight(_human);
+        dino.compareDiet(_human);
+        dino.addFacts();
+    });
+
+    return _array;
+}
+
+// Generate Tiles for each Dino in Array
+const makeTiles = _array => {
+    // console.log(_array);
+    // const elementsArr = _array.map(item => {
+    //     return Helper.createDomEl({ type: 'DIV', classes: ['grid-item'] });
+    //     // return item.createContent();
+    // });
+
+
+    // console.log(elementsArr);
+
+    // return elementsArr;
 };
 
 // Add tiles to DOM
-const addTilesToDOM = _dinosParam => {
-    document.getElementById('dino-compare').style.display = 'none';
-
+const addTilesToDOM = _array => {
     const domGrid = document.getElementById('grid');
 
-    _dinosParam.forEach(dino => {
-        domGrid.innerHTML += dino.species;
+    document.getElementById('dino-compare').style.display = 'none';
+
+    console.log(_array);
+
+    _array.forEach(arrItem => {
+        domGrid.insertAdjacentElement('afterbegin', arrItem);
     });
+};
+
+const addHumanToTilesArray = (_array, _human) => {
+    _array.splice(4, 0, _human);
+    return _array;
 };
 
 // Remove form from screen
@@ -132,8 +169,8 @@ const validateForm = () => {
 function init() {
 
     // Use IIFE to get human data from form
-    // Revealing Module Pattern
     const human = (function getHumanData() {
+        // Revealing Module Pattern
         let name, feet, inches, weight, diet;
 
         function validateForm() {
@@ -146,26 +183,33 @@ function init() {
         weight = parseInt(document.getElementById('weight').value);
         diet = document.getElementById('diet').value;
 
-        return {
-            name,
-            feet,
-            inches,
-            weight,
-            diet
-        }
+        let el = document.createElement('DIV');
+        let content = `<h3>${name}</h3>`;
+
+        el.classList.add('grid-item');
+        el.innerHTML = content;
+        
+        return el;
+
+        // return {
+        //     name,
+        //     feet,
+        //     inches,
+        //     weight,
+        //     diet
+        // }
     })();
 
-    dinosArray.forEach(dino => {
-        dino.compareHeight(human);
-        dino.compareWeight(human);
-        dino.compareDiet(human);
-        dino.addFacts();
-        // console.log(dino.facts);
-    });
+    const dinosArrayUpdated = updateDinos(dinosArray, human);
+    // console.log(dinosArrayUpdated);
 
-    // addTilesToDOM(dinosArray);
+    const dinosHtmlArray = createDinoHTML(dinosArrayUpdated);
+    // console.log(dinosHtmlArray);
 
-    makeTiles(dinosArray);
+    const dinosArrayWithHuman = addHumanToTilesArray(dinosHtmlArray, human);
+    // console.log(dinosArrayWithHuman);
+
+    addTilesToDOM(dinosArrayWithHuman);
 }
 
 // On button click, prepare and display infographic
