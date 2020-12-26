@@ -44,7 +44,7 @@ getDinoData().then(data => {
     console.error(err);
 });
 
-//Create at least 3 methods that compare dino data to human data
+// Create at least 3 methods that compare dino data to human data
 
 // Create Dino Compare Method 1
 // NOTE: Weight in JSON file is in lbs, height in inches. 
@@ -101,8 +101,6 @@ DinoConstructor.prototype.createContent = function() {
                                 <h3>${this.species}</h3>
                                 <p class="fact">${this.facts[factToShow]}</p>
                             </div>`;
-    // let content = `<h3>${this.species}</h3>
-    //                 <p class="fact">${this.facts[factToShow]}</p>`;
 
     el.classList.add('grid-item');
     el.setAttribute('style', `background-image: url(images/${name}.png)`);
@@ -136,16 +134,6 @@ function updateDinos(_array, _human) {
     return _array;
 }
 
-// Generate Tiles for each Dino in Array
-const makeTiles = _array => {
-    // const elementsArr = _array.map(item => {
-    //     return Helper.createDomEl({ type: 'DIV', classes: ['grid-item'] });
-    //     // return item.createContent();
-    // });
-
-    // return elementsArr;
-};
-
 // Add tiles to DOM
 const addTilesToDOM = _array => {
     const domGrid = document.getElementById('grid');
@@ -162,15 +150,6 @@ const addHumanToTilesArray = (_array, _human) => {
     return _array;
 };
 
-// Remove form from screen
-const removeFormFromScreen = () => {
-
-};
-
-const validateForm = () => {
-    console.log('%cTODO: Validate Form', 'color: gold');
-};
-
 
 function init() {
 
@@ -178,10 +157,6 @@ function init() {
     const human = (function getHumanData() {
         // Revealing Module Pattern
         let name, feet, inches, weight, diet;
-
-        function validateForm() {
-
-        }
 
         name = document.getElementById('name').value;
         feet = parseInt(document.getElementById('feet').value);
@@ -201,8 +176,6 @@ function init() {
 
         el.classList.add('grid-item');
         el.innerHTML = content;
-        
-        // return el;
 
         return {
             name,
