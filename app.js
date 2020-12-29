@@ -1,5 +1,3 @@
-import * as Helper from './helper.js';
-
 // Start http-server w/ "npx http-server"
 // See link for http-server documentation: https://github.com/http-party/http-server
 
@@ -104,7 +102,7 @@ DinoConstructor.prototype.createContent = function() {
                             </div>`;
 
     el.classList.add('grid-item');
-    el.setAttribute('style', `background-image: url(images/${name}.png)`);
+    el.setAttribute('style', `background-image: url(./images/${name}.png)`);
 
     el.innerHTML = content;
 
