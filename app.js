@@ -4,7 +4,8 @@ import * as Helper from './helper.js';
 // See link for http-server documentation: https://github.com/http-party/http-server
 
 const getDinoData = async () => {
-    const fetchedData = await fetch('http://127.0.0.1:8080/dino.json');
+    // const fetchedData = await fetch('http://127.0.0.1:8080/dino.json');
+    const fetchedData = await fetch('/dino.json');
     const data = await fetchedData.json();
     return data.Dinos;
 }
@@ -27,7 +28,7 @@ getDinoData().then(data => {
     const dinos = data;
     
     dinos.forEach(dinoItem => {
-        const dinoObj = new DinoConstructor(
+        const dinoObj = new DinoConstructor (
             dinoItem.species,
             dinoItem.weight,
             dinoItem.height,
