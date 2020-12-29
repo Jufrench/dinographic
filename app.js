@@ -5,7 +5,7 @@ import * as Helper from './helper.js';
 
 const getDinoData = async () => {
     // const fetchedData = await fetch('http://127.0.0.1:8080/dino.json');
-    const fetchedData = await fetch('/dino.json');
+    const fetchedData = await fetch('./dino.json');
     const data = await fetchedData.json();
     return data.Dinos;
 }
