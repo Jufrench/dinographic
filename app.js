@@ -48,7 +48,6 @@ getDinoData().then(data => {
 // Create Dino Compare Method 1
 // NOTE: Weight in JSON file is in lbs, height in inches. 
 DinoConstructor.prototype.compareHeight = function(_param) {
-    console.log(_param);
     const humanHeight = (_param.feet * 12) + _param.inches;
     let fact;
 
@@ -102,7 +101,8 @@ DinoConstructor.prototype.createContent = function() {
                             </div>`;
 
     el.classList.add('grid-item');
-    el.setAttribute('style', `background-image: url(./images/${name}.png)`);
+    el.setAttribute('style', `background-image: url(./images/${name.toLowerCase()}.png)`);
+    console.log(el);
 
     el.innerHTML = content;
 
@@ -185,7 +185,7 @@ function init() {
             element: el,
         }
     })();
-    console.log(human);
+
     const dinosArrayUpdated = updateDinos(dinosArray, human);
     const dinosHtmlArray = createDinoHTML(dinosArrayUpdated);
     const dinosArrayWithHuman = addHumanToTilesArray(dinosHtmlArray, human.element);
