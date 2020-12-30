@@ -44,9 +44,9 @@ getDinoData().then(data => {
 });
 
 // Create at least 3 methods that compare dino data to human data
+// NOTE: Weight in JSON file is in lbs, height in inches.
 
 // Create Dino Compare Method 1
-// NOTE: Weight in JSON file is in lbs, height in inches. 
 DinoConstructor.prototype.compareHeight = function(_param) {
     const humanHeight = (_param.feet * 12) + _param.inches;
     let fact;
@@ -91,6 +91,7 @@ DinoConstructor.prototype.addFacts = function() {
     this.facts.push(fact2);
 }
 
+// Create dino HTML w/ facts
 DinoConstructor.prototype.createContent = function() {
     const el = document.createElement('DIV');
     let name = this.species.split(' ').join('_');
@@ -102,14 +103,13 @@ DinoConstructor.prototype.createContent = function() {
 
     el.classList.add('grid-item');
     el.setAttribute('style', `background-image: url(./images/${name.toLowerCase()}.png)`);
-    console.log(el);
 
     el.innerHTML = content;
 
     return el;
 }
 
-const createDinoHTML = (_array) => {
+const createDinoHtmlArray = (_array) => {
     const htmlElArray = _array.map(dino => {
         return dino.createContent();
     });
@@ -137,8 +137,6 @@ function updateDinos(_array, _human) {
 const addTilesToDOM = _array => {
     const domGrid = document.getElementById('grid');
 
-    document.getElementById('dino-compare').style.display = 'none';
-
     _array.forEach(arrItem => {
         domGrid.insertAdjacentElement('afterbegin', arrItem);
     });
@@ -148,6 +146,10 @@ const addHumanToTilesArray = (_array, _human) => {
     _array.splice(4, 0, _human);
     return _array;
 };
+
+const hideForm = () => {
+    document.getElementById('dino-compare').style.display = 'none';
+}
 
 
 function init() {
@@ -164,14 +166,15 @@ function init() {
         diet = document.getElementById('diet').value;
 
         let el = document.createElement('DIV');
-        let content = `<div class="grid-item-inner">
-                        <h3>${name}</h3>
-                        <ul class="info">
-                            <li>Height: <span>${feet}</span><span>feet</span><span>${inches}</span><span>inches</span></li>
-                            <li>Weight: <span>${weight}</span><span>lbs</span></li>
-                            <li>Diet: <span>${diet}</span></li>
-                        </ul>
-                    </div>`;
+        // let content = `<div class="grid-item-inner">
+        //                 <h3>${name}</h3>
+        //                 <ul class="info">
+        //                     <li>Height: <span>${feet}</span><span>feet</span><span>${inches}</span><span>inches</span></li>
+        //                     <li>Weight: <span>${weight}</span><span>lbs</span></li>
+        //                     <li>Diet: <span>${diet}</span></li>
+        //                 </ul>
+        //             </div>`;
+        let content = `<div class="grid-item-inner"><h3>${name}</h3></div>`;
 
         el.classList.add('grid-item');
         el.innerHTML = content;
@@ -187,9 +190,9 @@ function init() {
     })();
 
     const dinosArrayUpdated = updateDinos(dinosArray, human);
-    const dinosHtmlArray = createDinoHTML(dinosArrayUpdated);
+    const dinosHtmlArray = createDinoHtmlArray(dinosArrayUpdated);
     const dinosArrayWithHuman = addHumanToTilesArray(dinosHtmlArray, human.element);
-
+    hideForm();
     addTilesToDOM(dinosArrayWithHuman);
 }
 
